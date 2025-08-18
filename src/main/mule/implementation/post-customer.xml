@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+<mule
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
-	<sub-flow name="post-customer_Sub-Flow" doc:id="120cffda-8ea6-4249-893b-ea93525c9a7b" >
-		<set-variable value='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"type": "Criação",&#10;	"@timestamp": now(),&#10;	"@correlationId": vars."x-correlation-id",&#10;	customer: {&#10;		birthday: payload.birthday,&#10;		address: payload.address,&#10;		bonus: payload.bonus,&#10;		document: payload.document,&#10;		name: payload.name,&#10;		id: payload.id&#10;	}&#10;		&#10;}]' doc:name="elkbody" doc:id="f795ca89-c338-4cae-8a87-a4897956ed66" variableName="elkbody"/>
+	<sub-flow
+		name="post-customer_Sub-Flow"
+		doc:id="120cffda-8ea6-4249-893b-ea93525c9a7b">
 		<flow-ref doc:name="Send functional event to ELK" doc:id="af39e13f-3344-4cb7-ace7-e7a58e6a32ba" name="send-elastic"/>
 		<logger level="INFO" doc:name="Logger" doc:id="f3d2b032-7ed1-4247-acd7-1d5310699bf7" />
 	</sub-flow>
