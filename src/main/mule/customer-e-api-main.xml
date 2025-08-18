@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+	
+	<flow name="customer-e-api-main">
+		<http:listener
+			config-ref="customer-e-api-httpListenerConfig"
+			path="/v1/*">
+			<http:response statusCode="#[vars.httpStatus default 200]">
+				<http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+			</http:response>
+			<http:error-response statusCode="#[vars.httpStatus default 500]">
+				<http:body><![CDATA[#[payload]]]></http:body>
+				<http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+			</http:error-response>
+		</http:listener>
+		<set-variable value='#[attributes.headers."x-correlation-id"]' doc:name="x-correlation-id" doc:id="3af13298-f974-4aab-bedd-f5eef251802c" variableName="x-correlation-id"/>
+		<logger level="INFO" doc:name="Logger de Inicio de Execução" doc:id="6767ab6a-27c3-45a7-802c-2da46516d235" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{ &#10;	"payload": payload,&#10;	"correlation-id": vars."x-correlation-id"&#10;}]' />
+		<apikit:router config-ref="customer-e-api-config" />
+		<error-handler ref="API-KIT_Error-Handler" />
+	</flow>
+	
+	<flow name="customer-e-api-console">
+		<http:listener
+			config-ref="customer-e-api-httpListenerConfig"
+			path="/console/*">
+			<http:response statusCode="#[vars.httpStatus default 200]">
+				<http:headers>#[vars.outboundHeaders default {}]</http:headers>
+			</http:response>
+			<http:error-response statusCode="#[vars.httpStatus default 500]">
+				<http:body>#[payload]</http:body>
+				<http:headers>#[vars.outboundHeaders default {}]</http:headers>
+			</http:error-response>
+		</http:listener>
+		<apikit:console config-ref="customer-e-api-config" />
+		<error-handler ref="Console_Error-Handler" />
+	</flow>
+	
+	<flow name="put:\customers\(id):application\json:customer-e-api-config">
+		<ee:transform doc:name="Transform Message">
+			<ee:variables>
+				<ee:set-variable variableName="id">attributes.uriParams.'id'</ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="put-customer-with-id_Sub-Flow" doc:id="9dce67b7-f4ae-4409-8d7a-af4d69dda0e1" name="put-customer-with-id_Sub-Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="71c8f951-f1d9-40ba-a976-aa92f422f81c" message="#[payload]" />
+	</flow>
+	<flow name="delete:\customers\(id):customer-e-api-config">
+		<ee:transform doc:name="Transform Message">
+			<ee:variables>
+				<ee:set-variable variableName="id">attributes.uriParams.'id'</ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="delete-customer-with-id_Sub-Flow" doc:id="04c1167d-220a-459f-a5ae-eb0ced61972b" name="delete-customer-with-id_Sub-Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="d4eae0c9-035a-43e6-abcb-8d0698ec7d46" message="#[payload]" />
+	</flow>
+	<flow name="get:\customers:customer-e-api-config">
+		<flow-ref doc:name="get-customer_Sub-Flow" doc:id="4fab2e25-7e52-4099-9dbb-76a0dac58e39" name="get-customer_Sub-Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="156537a4-0fee-4720-a502-ef1654d3f11c" message="#[payload]" />
+	</flow>
+	<flow name="post:\customers:application\json:customer-e-api-config">
+		<flow-ref doc:name="post-customer_Sub-Flow" doc:id="6ee9f695-a004-40f6-bb66-3c2baf225d2b" name="post-customer_Sub-Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="570b2cf0-0372-44da-8aea-9dcb46315cf3" message="#[payload]" />
+	</flow>
+</mule>

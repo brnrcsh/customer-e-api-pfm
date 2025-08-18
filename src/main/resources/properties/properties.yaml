@@ -1,0 +1,7 @@
+http:
+  host: "0.0.0.0"
+  protocol: "HTTP"
+  port: "8081"
+  timeout:
+    connection: "40000"
+    read: "30000"
