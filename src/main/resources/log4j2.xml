@@ -9,12 +9,46 @@
         see them in the mule_ee.log file. -->
 
     <Appenders>
+    
         <RollingFile name="file" fileName="${sys:mule.home}${sys:file.separator}logs${sys:file.separator}customer-e-api.log"
                  filePattern="${sys:mule.home}${sys:file.separator}logs${sys:file.separator}customer-e-api-%i.log">
             <PatternLayout pattern="%-5p %d [%t] [processor: %X{processorPath}; event: %X{correlationId}] %c: %m%n"/>
             <SizeBasedTriggeringPolicy size="10 MB"/>
             <DefaultRolloverStrategy max="10"/>
         </RollingFile>
+        
+        <Http name="ELK"
+			url="http://20.84.120.171:9200/pfm-porto/_doc">
+			
+			<JsonLayout
+				includeTimeMillis="true" compact="false" eventEol="true" objectMessageAsJsonObject="true" properties="true" stacktraceAsString="true">
+				
+				<!-- <KeyValuePair key="trace_id" value="${ctx:trace_id}"/>
+	            <KeyValuePair key="span_id" value="${ctx:span_id}"/> -->
+	            <KeyValuePair key="service.name" value="bruno-customer-e-api"/>
+				<KeyValuePair
+					key="env"
+					value="dev" />
+				<KeyValuePair
+					key="application"
+					value="bruno-customer-e-api" />
+				<KeyValuePair
+					key="@timestamp"
+					value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
+					
+			</JsonLayout>
+		
+			<Property
+				name="kbn-xsrf"
+				value="true" />
+			<Property
+				name="Content-Type"
+				value="application/json" />
+			<Property
+				name="Authorization"
+				value="ApiKey WWRkeHZwZ0JFWGFVUk56Yi1ieFM6T2dxRXkzeFhDUDVIQktTWDB3eDI3dw==" />
+		</Http>
+		
     </Appenders>
 
     <Loggers>
@@ -28,6 +62,7 @@
 
         <AsyncRoot level="INFO">
             <AppenderRef ref="file"/>
+            <AppenderRef ref="ELK"/>
         </AsyncRoot>
     </Loggers>
 

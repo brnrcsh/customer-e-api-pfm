@@ -22,5 +22,15 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	<configuration-properties doc:name="Configuration properties" doc:id="026b4483-2e8d-4ea0-969e-c17b8e1bf08b" file="properties/properties.yaml" />
 	<configuration-properties doc:name="Configuration properties" doc:id="cc68740a-232c-4e8c-9262-b24a44751ce7" file="properties/properties-${mule.env}.yaml" />
 	<global-property doc:name="Global Property" doc:id="29001f55-44ea-4d79-8a08-75940d68828f" name="mule.env" value="dev" />
+	<http:request-config name="ElasticSearch_HTTP-Req-conf" doc:name="HTTP Request configuration" doc:id="24276fa7-f95e-4fad-b666-75d886bc9e6d" basePath="/${elasticsearch.index}">
+		<http:request-connection host="${elasticsearch.host}" port="${elasticsearch.port}" >
+			<reconnection >
+				<reconnect frequency="3000" count="5" />
+			</reconnection>
+		</http:request-connection>
+		<http:default-headers >
+			<http:default-header key="Authorization" value="${elasticsearch.apiKey}" />
+		</http:default-headers>
+	</http:request-config>
 	
 </mule>
