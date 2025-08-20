@@ -23,6 +23,7 @@ http://www.mulesoft.org/schema/mule/tracing http://www.mulesoft.org/schema/mule/
 			</http:error-response>
 		</http:listener>
 		<set-variable value='#[attributes.headers."x-correlation-id"]' doc:name="x-correlation-id" doc:id="3af13298-f974-4aab-bedd-f5eef251802c" variableName="x-correlation-id"/>
+		<set-variable doc:name="headersKafka" doc:id="7a12e5b3-aead-4c9c-8f58-92392aaea2da" variableName="headersKafka" value="#[${file::dwl/commons/headers-kafka.dwl}]"/>
 		<tracing:set-logging-variable doc:name="Set Trace Id"
 	        variableName="#['trace_id']"
 	        value="#[vars.OTEL_TRACE_CONTEXT.traceId]"/>

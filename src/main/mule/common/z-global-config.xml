@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:opentelemetry="http://www.mulesoft.org/schema/mule/opentelemetry"
-	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+<mule xmlns:kafka="http://www.mulesoft.org/schema/mule/kafka"
+	xmlns:opentelemetry="http://www.mulesoft.org/schema/mule/opentelemetry"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/opentelemetry http://www.mulesoft.org/schema/mule/opentelemetry/current/mule-opentelemetry.xsd">
+http://www.mulesoft.org/schema/mule/opentelemetry http://www.mulesoft.org/schema/mule/opentelemetry/current/mule-opentelemetry.xsd
+http://www.mulesoft.org/schema/mule/kafka http://www.mulesoft.org/schema/mule/kafka/current/mule-kafka.xsd">
 	
 	<http:listener-config name="customer-e-api-httpListenerConfig">
 		<http:listener-connection
@@ -41,5 +42,15 @@ http://www.mulesoft.org/schema/mule/opentelemetry http://www.mulesoft.org/schema
 			<opentelemetry:otlp-exporter collectorEndpoint="http://20.84.120.171:5602" requestCompression="GZIP"/>
 		</opentelemetry:exporter>
 	</opentelemetry:config>
+	<kafka:producer-config name="Apache_Kafka_Producer_configuration" doc:name="Apache Kafka Producer configuration" doc:id="83b100af-1a21-4bb6-8d76-51d0b984bc6a" >
+		<kafka:producer-plaintext-connection >
+			<kafka:bootstrap-servers >
+				<kafka:bootstrap-server value="${kafka.bootstrap.server}" />
+			</kafka:bootstrap-servers>
+		</kafka:producer-plaintext-connection>
+	</kafka:producer-config>
+	<http:request-config name="mule-customer-p-api_HTTP-Request-configuration" doc:name="HTTP Request configuration" doc:id="7d074fac-f368-40ce-ab9a-9ccf1585d522" responseTimeout="${mule-customer-p-api.timeout.request}" basePath="${mule-customer-p-api.basePath}">
+		<http:request-connection host="${mule-customer-p-api.host}" port="${mule-customer-p-api.port}" connectionIdleTimeout="${mule-customer-p-api.timeout.connection}" />
+	</http:request-config>
 	
 </mule>

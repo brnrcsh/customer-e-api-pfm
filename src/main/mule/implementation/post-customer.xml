@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <mule
+	xmlns:kafka="http://www.mulesoft.org/schema/mule/kafka"
 	xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/kafka http://www.mulesoft.org/schema/mule/kafka/current/mule-kafka.xsd">
 	<sub-flow
 		name="post-customer_Sub-Flow"
 		doc:id="120cffda-8ea6-4249-893b-ea93525c9a7b">
 		<flow-ref doc:name="Send functional event to ELK" doc:id="af39e13f-3344-4cb7-ace7-e7a58e6a32ba" name="send-elastic"/>
+		<kafka:publish doc:name="Publish kafka.topics.customer" doc:id="ed2516b4-52bd-42df-9727-c6614f274de9" config-ref="Apache_Kafka_Producer_configuration" topic="${kafka.topics.customer}">
+			<kafka:headers ><![CDATA[#[vars.headersKafka]]]></kafka:headers>
+		</kafka:publish>
 		<logger level="INFO" doc:name="Logger" doc:id="f3d2b032-7ed1-4247-acd7-1d5310699bf7" />
 	</sub-flow>
 </mule>

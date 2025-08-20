@@ -15,7 +15,7 @@ kafka:
     server: "20.84.120.171:29092"
   topics:
     customer: "bruno-customer-topic"
- 
+    
 mule-customer-p-api:
   host: "localhost"
   port: "8082"
@@ -24,3 +24,4 @@ mule-customer-p-api:
   timeout:
     connection: "40000"
     request: "30000"
+ 
