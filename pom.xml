@@ -28,6 +28,9 @@
 				<artifactId>mule-maven-plugin</artifactId>
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
+				<configuration>
+					<classifier>mule-application</classifier>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -48,7 +51,7 @@
 		<dependency>
 			<groupId>fd910f05-df24-42bd-b701-691e4d055415</groupId>
 			<artifactId>customer-e-api</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 			<classifier>raml</classifier>
 			<type>zip</type>
 		</dependency>
@@ -80,6 +83,12 @@
 			<groupId>com.mulesoft.connectors</groupId>
 			<artifactId>mule-kafka-connector</artifactId>
 			<version>4.10.2</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>fd910f05-df24-42bd-b701-691e4d055415</groupId>
+			<artifactId>mule-plugin-customer-p-api</artifactId>
+			<version>1.0.1</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
 	</dependencies>

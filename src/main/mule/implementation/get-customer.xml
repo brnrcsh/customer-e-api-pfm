@@ -7,7 +7,12 @@ http://www.mulesoft.org/schema/mule/kafka http://www.mulesoft.org/schema/mule/ka
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<sub-flow name="get-customer_Sub-Flow" doc:id="e076f2d8-00ad-4337-b301-2bf495a5ca62" >
 		<flow-ref doc:name="Send functional event to ELK" doc:id="bdc208e1-3741-401f-8180-869a4a2187e6" name="send-elastic" />
-		<http:request method="GET" doc:name="customer-p-api" doc:id="a6defedc-bf0d-44af-b782-8be1218a0524" config-ref="mule-customer-p-api_HTTP-Request-configuration" path="${mule-customer-p-api.path}"/>
+		<http:request method="GET" doc:name="customer-p-api" doc:id="a6defedc-bf0d-44af-b782-8be1218a0524" config-ref="mule-customer-p-api_HTTP-Request-configuration" path="${mule-customer-p-api.path}">
+			<http:headers><![CDATA[#[{
+	"traceparent": vars.OTEL_TRACE_CONTEXT.traceparent as String,
+	"tracestate": vars.OTEL_TRACE_CONTEXT.tracestate default '' as String
+}]]]></http:headers>
+		</http:request>
 		<logger level="INFO" doc:name="Logger" doc:id="b234a5d6-b2a9-49f1-a112-6c1e1ac53717" />
 	</sub-flow>
 </mule>

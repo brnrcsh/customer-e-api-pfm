@@ -6,7 +6,8 @@
 http://www.mulesoft.org/schema/mule/kafka http://www.mulesoft.org/schema/mule/kafka/current/mule-kafka.xsd">
 	<sub-flow name="delete-customer-with-id_Sub-Flow" doc:id="75473ad8-025b-44d5-a9c4-f7202c5ba985" >
 		<flow-ref doc:name="Send functional event to ELK" doc:id="93fc492f-d113-4c44-9022-b36c8bd15576" name="send-elastic" />
-		<kafka:publish doc:name="Publish kafka.topics.customer" doc:id="237f50cc-97f7-42da-ba23-dccd840bf9ad" config-ref="Apache_Kafka_Producer_configuration" topic="${kafka.topics.customer}">
+		<kafka:publish doc:name="Publish kafka.topics.customer" doc:id="237f50cc-97f7-42da-ba23-dccd840bf9ad" config-ref="Apache_Kafka_Producer_configuration" topic="${kafka.topics.customer}" target="kafkaResponse">
+			<kafka:message ><![CDATA[#[vars.id]]]></kafka:message>
 			<kafka:headers ><![CDATA[#[vars.headersKafka]]]></kafka:headers>
 		</kafka:publish>
 		<logger level="INFO" doc:name="Logger" doc:id="590c4a1d-4469-4b09-a9a7-104decc2ae53" />

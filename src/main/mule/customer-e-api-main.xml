@@ -54,7 +54,12 @@ http://www.mulesoft.org/schema/mule/tracing http://www.mulesoft.org/schema/mule/
 	<flow name="put:\customers\(id):application\json:customer-e-api-config">
 		<ee:transform doc:name="Transform Message">
 			<ee:variables>
-				<ee:set-variable variableName="id">attributes.uriParams.'id'</ee:set-variable>
+				<ee:set-variable variableName="id"><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"id": attributes.uriParams.'id'
+}]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="put-customer-with-id_Sub-Flow" doc:id="9dce67b7-f4ae-4409-8d7a-af4d69dda0e1" name="put-customer-with-id_Sub-Flow"/>
@@ -63,7 +68,12 @@ http://www.mulesoft.org/schema/mule/tracing http://www.mulesoft.org/schema/mule/
 	<flow name="delete:\customers\(id):customer-e-api-config">
 		<ee:transform doc:name="Transform Message">
 			<ee:variables>
-				<ee:set-variable variableName="id">attributes.uriParams.'id'</ee:set-variable>
+				<ee:set-variable variableName="id"><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"id": attributes.uriParams.'id'
+}]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="delete-customer-with-id_Sub-Flow" doc:id="04c1167d-220a-459f-a5ae-eb0ced61972b" name="delete-customer-with-id_Sub-Flow"/>
