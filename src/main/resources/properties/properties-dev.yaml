@@ -17,8 +17,9 @@ kafka:
     customer: "bruno-customer-topic"
  
 mule-customer-p-api:
-  host: "localhost"
-  port: "8082"
+  host: "bruno-customer-p-api-55woib.5sc6y6-4.usa-e2.cloudhub.io"
+  protocol: "HTTPS"
+  port: "443"
   basePath: "v1"
   path: "customers"
   timeout:

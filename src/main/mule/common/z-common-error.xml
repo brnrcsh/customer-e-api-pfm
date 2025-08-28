@@ -70,7 +70,32 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			</on-error-propagate>
 		</error-handler>
 	
-		<error-handler name="Console_Error-Handler">
+		<error-handler name="HTTP_Error-Handler" doc:id="379dd9de-deab-40db-90bc-b5373a6b9aac" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="71086186-e887-4792-8906-cc25aa646781" type="HTTP:CONNECTIVITY">
+			<logger level="ERROR" doc:name="ERROR - PAYLOAD" doc:id="7c3684c8-35f8-44a0-aa82-64783f3fba55" message="#[payload]"/>
+			<ee:transform doc:name="Error Data Model" doc:id="76a78e1a-f55f-4808-bbff-e7bfd93194a7" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+
+{
+  "header" : {
+    "apiName": p('api.name'),
+    "apiVersion": p('api.version'),
+    "correlationId" : correlationId
+  },
+  "error" : {
+      "description" : error.description,
+      "code": "500",
+      "timestamp": now()
+  }
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+		</on-error-propagate>
+	</error-handler>
+	<error-handler name="Console_Error-Handler">
 			<on-error-propagate type="APIKIT:NOT_FOUND">
 				<ee:transform doc:name="Transform Message" doc:id="66572b48-cfa6-4cf8-8b83-f61712e295cb">
 					<ee:message>
